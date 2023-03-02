@@ -45,7 +45,7 @@
     {% for comment in comments %}
         <div class="my-2 p-2 card bg-secondary-subtle">
            <p class="small m-0 mb-1">
-               Comentario {{forloop.counter}} realizado por {{comment.name}} en fecha {{comment.created}}
+               Comentario {{forloop.counter}} realizado por {{comment.user}} en fecha {{comment.created}}
            </p> 
            <p class="m-0 lead">{{comment.body}}</p>
         </div>

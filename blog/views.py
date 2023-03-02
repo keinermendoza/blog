@@ -1,13 +1,17 @@
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from .models import Post, Comment
-from .forms import EmailPostForm, CommentForm
+from .models import Post, Comment, User
+from .forms import EmailPostForm, CommentForm, RegisterForm, LoginForm
 from taggit.models import Tag
 from django.db.models import Count
-
+from django.contrib.auth import logout, login, authenticate
+from django.contrib import messages
+from django.contrib.messages import constants
 
 def home(request):
     return render(request, "blog/home.html")
@@ -69,11 +73,6 @@ def post_detail(request, post_slug, day, month, year):
                                                       "comments":comments,
                                                       "similar_posts":similar_posts})
                                                       
-
-
-
-
-
 @require_POST
 def post_comment(request, post_id):
     """process the comment submitions"""
@@ -84,15 +83,25 @@ def post_comment(request, post_id):
     if form.is_valid():
         comment = form.save(commit=False)
         comment.post = post
+
+        if request.user.is_authenticated:
+            comment.user = request.user
+            message = "Comentario publicado con exito"
+        else:
+            comment.user = User.objects.get(id=2) # anonimos user
+            comment.active = False
+            message = "Comentario publicado como usuario anonimo, será publicado luego de pasar por revision"
+
+
         comment.save()
+        messages.add_message(request, constants.SUCCESS, message)
+
         return JsonResponse({"message":"Comentario publicado con Exito"}, status=200)
     else:
         errors = form.errors.get_json_data()
         return JsonResponse(errors, status=400, safe=False)
 
-    # return render(request, "blog/posts/comment.html", {"post":post, "form":form, "comment":comment})
-
-
+@login_required
 @require_POST
 def post_share(request, post_id):
     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
@@ -101,20 +110,16 @@ def post_share(request, post_id):
     if form.is_valid():
         cd = form.cleaned_data
         
-        message = f"acabas de recibir una recomendacion de lectura del\
-            Blog de Keiner Mendoza.\
-            Puedes encontrar la publicacion en {request.build_absolute_uri(post.get_absolute_url())}"
-        
-        message_end = f"\n\nEn caso que no conozca a {cd['nombre']}. o no tenga entre sus contactos a {cd['correo']}\
-            puede ignorar este correo"
+        message = f"acabas de recibir una recomendacion de lectura del Blog de Keiner Mendoza. Puedes encontrar la publicacion en {request.build_absolute_uri(post.get_absolute_url())}"
+        message_end = f"\n\nEn caso que no conozca a {request.user} o no tenga entre sus contactos a {request.user.email} puede ignorar este correo"
         
         if cd['comentario'].strip() != "":
-            message += f"\n\n{cd['nombre']}\' tambien dice: {cd['comentario']}"
+            message += f"\n\n{request.user}\' comenta sobre esta publicacion que: {cd['comentario']}"
     
         send_mail(
-            f"{cd['nombre']} te recomienda leer {post.title}",
+            f"{request.user} te recomienda leer {post.title}",
             message + message_end,
-            cd['correo'],
+            request.user.email,
             [cd['destinatario']],
             fail_silently=False
         )
@@ -123,7 +128,46 @@ def post_share(request, post_id):
         errors = form.errors.get_json_data()
         return JsonResponse(errors, status=400, safe=False)
 
-   
+def register(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = User.objects.create_user(username=cd["nombre"], password=cd["contraseña"])
+            user.email = cd["email"]
+            user.save()
+        
+            login(request, user)
+            messages.add_message(request, constants.SUCCESS, f"Welcome {user.username}")
+            return redirect(reverse("post_list"))
+    else:
+        form = RegisterForm()
+    return render(request, "blog/login_or_register.html", {"form":form})
+
+def login_view(request):
+    if request.user.is_authenticated: # avoid the users already loged
+        return redirect(reverse("post_list"))
+    
+    if request.method == "POST":
+
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            if user := authenticate(username=cd["nombre"], password=cd["contraseña"]):
+                print(user)
+                login(request, user)
+                messages.add_message(request, constants.SUCCESS, f"Bienvenido {user.username}")
+                return redirect(reverse("post_list"))
+        else:
+            messages.add_message(request, constants.ERROR, "Lo siento, email o contraseña invalida.")
+    else:
+        form = LoginForm()
+    return render(request, "blog/login_or_register.html", {"form": form,
+                                            "show_register_link":True})
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect(reverse("post_list"))
 
 # def post_share(request, post_id):
 #     send = False

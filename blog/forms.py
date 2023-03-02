@@ -1,38 +1,23 @@
+from django.urls import reverse_lazy
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from .models import Comment
 
 class CommentForm(forms.ModelForm):
-
     class Meta:
         model = Comment
-        fields = ["name", "email", "body"]
+        fields = ["body"]
 
         widgets = {
             "body": forms.Textarea(attrs={"rows":4})
         }
-
         error_messages = {
-            "name": {
-                "required": "Por favor llene el campo Nombre",
-                "max_length": "Este campo acepta hasta 120 caracteres"
-            },
-            "email": {
-                "required": "Por favor ingrese su Email",
-                "invalid": "Email invalido"
-            },
             "body": {
                 "required": "Estoy feliz de que quiera comentar, por favor rellene el campo Comentario",
             }
         }
-        help_texts = {
-            "email": "El email se mantendrá en privado",
-        }
-
         labels = {
-            "name": "Nombre",
-            "email": "Email",
             "body": "Comentario",
         }
 
@@ -44,26 +29,18 @@ class CommentForm(forms.ModelForm):
 
 
 class EmailPostForm(forms.Form):
-    nombre = forms.CharField(max_length=120)
-    correo = forms.EmailField()
-    destinatario = forms.EmailField()
+    destinatario = forms.EmailField(help_text="Enviaré su recomendación a este email")
     comentario = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows":4}))
+                                 
 
     class Meta:
-        invalid_message = "Email invalido"
-
         error_messages = {
-            "name": {
-                "required": "Por favor llene el campo Nombre",
-                "max_length": "Este campo acepta hasta 120 caracteres"
+            "comentario": {
+                "required": "Estoy feliz de que quiera recomendar mi publicación, por favor rellene el campo Comentario",
             },
-            "email": {
-                "required": "El campo Correo es necesario",
-                "invalid": invalid_message,
-            },
-            "to": {
+            "destinatario": {
                 "required": "El campo Destinatario es necesario",
-                "invalid": invalid_message,
+                "invalid": "Email no valido",
             },
         }
 
@@ -76,4 +53,23 @@ class EmailPostForm(forms.Form):
         self.helper = FormHelper(self)
         self.helper.form_tag = False
 
-    
+class LoginForm(forms.Form):
+    nombre = forms.CharField(max_length=120, widget=forms.TextInput(attrs={"autofocus":"autofocus"}))
+    contraseña = forms.CharField(max_length=120, widget=forms.TextInput(attrs={"type":"password"}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_action = reverse_lazy('login')
+        self.helper.form_method = 'POST'
+        self.helper.add_input(Submit('submit', 'Iniciar Sesion', css_class="btn-outline-dark"))
+
+class RegisterForm(LoginForm):
+    email = forms.EmailField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_action = reverse_lazy('register')
+        self.helper.form_method = 'POST'
+        self.helper.add_input(Submit('submit', 'Registrar', css_class="btn-outline-dark"))

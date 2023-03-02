@@ -53,11 +53,12 @@ class Sender{
     }
 
     handleSuccess(data) {
-        this.toastContainer.appendChild(this.cretaeToast(data.message, false))
-        this.form.reset();
-        this.form["csrfmiddlewaretoken"].value = this.csrf;
         if (this.reload) {
             window.location.reload();
+        } else {
+            this.toastContainer.appendChild(this.cretaeToast(data.message, false))
+            this.form.reset();
+            this.form["csrfmiddlewaretoken"].value = this.csrf;
         }
     }
 
@@ -70,9 +71,9 @@ class Sender{
     cretaeToast(str, error=true) {
         const toast = document.createElement("div");
         if (error) {
-            toast.className = "alert alert-danger alert-dismissible fade show";
+            toast.className = "alert alert-danger alert-dismissible fade show  z-maximum";
         } else {
-            toast.className = "alert alert-success alert-dismissible fade show";
+            toast.className = "alert alert-success alert-dismissible fade show  z-maximum";
         }
         toast.role = "alert";
         toast.innerHTML = `

@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+<div class="text-center mx-auto max-w-400px">
+    <div class="my-3">
+        {% crispy form %}
+    </div>
+    {% if show_register_link %}
+        <p>Aun no tienes una cuenta?</p>
+        <p>Puedes <a href="{% url 'register' %}">Crear una cuenta 
+            Aqui</a> tomará apenas un momento.
+        </p>
+    {% else %}
+    <p>Ir a <a href="{% url 'login' %}">Iniciar Sesion</a>
+    </p>
+    {% endif %} 
+</div>    
+
+{% endblock %} 

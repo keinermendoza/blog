@@ -9,6 +9,10 @@ urlpatterns = [
     path('post/<int:post_id>/share', views.post_share, name="post_share"),
     path('post/<int:post_id>/comment', views.post_comment, name="post_comment"),
     path("feed/", LatestPostFeed(), name="posts_feed"),
+    path('login', views.login_view, name='login'),
+    path('register', views.register, name='register'),
+    path('logout', views.logout_view, name='logout'),
+
 
     # api_views
     path("posts/published_posts", api_views.published_posts, name="published_posts"),

@@ -14,7 +14,9 @@ class PublishedManager(models.Manager):
         
 
 class User(AbstractUser):
-    pass
+    def __str__(self):
+        return self.username
+
 
 class Post(models.Model):
     class Status(models.TextChoices):
@@ -64,9 +66,8 @@ class ActiveCommentManager(models.Manager):
         return super().get_queryset().filter(active=True)
 
 class Comment(models.Model):
-    name = models.CharField(max_length=120)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     body = models.TextField()
-    email = models.EmailField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
@@ -83,7 +84,7 @@ class Comment(models.Model):
 
 
     def __str__(self):
-        return f"Comment of {self.name} on {self.post.title}"
+        return f"Comment of {self.user.username} on {self.post.title}"
 
     def serialize(self):
         return {
