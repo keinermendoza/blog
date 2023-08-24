@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.query import QuerySet
 from django.utils import timezone
 from django.utils.text import Truncator
 from django.contrib.auth.models import AbstractUser
@@ -53,3 +54,29 @@ class Post(models.Model):
             "publish": self.publish,
             "url": self.get_absolute_url(),
         }
+    
+class ActiveCommentManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(active=True)
+
+class Comment(models.Model):
+    name = models.CharField(max_length=120)
+    body = models.TextField()
+    email = models.EmailField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+
+    objects = models.Manager()
+    oactive = ActiveCommentManager()
+
+    class Meta:
+        ordering = ["created"]
+        indexes = [
+            models.Index(fields=["created"])
+        ]
+
+
+def __str__(self):
+    return f"Comment of {self.name} on {self.post.title}"

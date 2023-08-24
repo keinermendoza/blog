@@ -1,0 +1,31 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    Comment {{post}}
+{% endblock title %}
+    
+
+{% block main %}
+    <h1>Commenting {{post.title}}</h1>
+    {% if comment %}
+    <h3>Comment Succefully Saved</h3>
+    <p>
+        Your comment on {{post.title}} was saved
+    </p>
+
+    {% else %}
+    <h3>Please Check the field errors</h3>
+    
+    {% include 'blog/posts/snippets/comment_form.html' %}
+    
+    {% endif %}
+
+    <div class="my-3">
+        <a href="{{post.get_absolute_url}}">Come Back to {{post.title}} Post</a>
+        <br>
+        <a href="{% url 'post_list' %}">Come Back to All Posts</a>
+    </div>
+{% endblock main %}
+    
