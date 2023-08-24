@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import Truncator
 from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
@@ -18,7 +19,7 @@ class Post(models.Model):
 
     title = models.CharField(max_length=250)
     body = models.TextField()
-    slug = models.SlugField(max_length=250)
+    slug = models.SlugField(max_length=250, unique_for_date=True)
     
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
@@ -27,7 +28,7 @@ class Post(models.Model):
                               choices=Status.choices,
                               default=Status.DRAFT)
     
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blog_post")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="publish")
 
     objects = models.Manager()
     publisehd = PublishedManager()
@@ -39,5 +40,16 @@ class Post(models.Model):
         ]
 
     def __str__(self):
-        return Truncator(self.title).words(5,"")
+        return Truncator(self.title).words(5,truncate="")
     
+    def get_absolute_url(self):
+        return reverse("post_detail", args=[self.slug, self.publish.day, self.publish.month, self.publish.year])
+
+    def serialize(self):
+        return {
+            "title": self.title,
+            "author": self.author.username,
+            "body": Truncator(self.body).words(20, truncate=" ..."),
+            "publish": self.publish,
+            "url": self.get_absolute_url(),
+        }

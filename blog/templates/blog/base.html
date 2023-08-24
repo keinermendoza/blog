@@ -17,11 +17,15 @@
         {% endblock title %}
     </title>
 </head>
-<body>
-    <main class="container-xxl">
+<body class="container-xxl py-3">
+    <div class="float-start w-50 ps-3">
         {% block main %}
         {% endblock main %}
-    </main>
+    </div>
+    <div class="float-end w-25 p-3 h-100 card bg-info-subtle">
+        <h2>My blog</h2>
+        <p class="m-0">this is my blog</p>
+    </div>
         
 </body>
 </html>

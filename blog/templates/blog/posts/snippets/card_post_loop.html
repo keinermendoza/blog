@@ -1,0 +1,10 @@
+{% for post in posts  %}
+    <a class="nav-link" href="{{ post.get_absolute_url }}">
+    <article class="card p-2 my-1">
+            <h3>{{post.title}}</h3>
+            <h6>By {{post.author.username}}</h6>
+            <p class="small">Publish on {{post.publish}}</p>
+            <p class="m-0">{{post.body | truncatewords:20}} </p> 
+    </article>
+    </a>
+{% endfor %}

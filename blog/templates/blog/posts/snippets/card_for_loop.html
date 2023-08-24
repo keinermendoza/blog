@@ -1,9 +1,0 @@
-{% for object in objects  %}
-    <a class="nav-link" href="{% url 'post_detail' object.slug %}">
-    <article class="card p-1 my-1">
-            <h3>{{object.title}}</h3>
-            <h4>By {{object.author.username}}</h4>
-            <p class="small lead">Publish on {{object.publish}}</p>
-    </article>
-    </a>
-{% endfor %}

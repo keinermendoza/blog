@@ -1,0 +1,28 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    Share {{post}}
+{% endblock title %}
+    
+
+{% block main %}
+    {% if send %}
+    <h1>Email Succefully Sent {{post}}</h1>
+    <p>
+        You recomended {{post.title}} to {{form.cleaned_data.to}}
+    </p>
+
+    {% else %}
+    <h1>Share {{post}}</h1>
+    
+    <div class="card p-2">
+        <form action="{% url 'post_share' post.id %}" method="post">
+            {% crispy form %}
+            <input type="submit" value="Share" class="float-end btn btn-primary">
+        </form>
+    </div>
+    {% endif %}
+{% endblock main %}
+    

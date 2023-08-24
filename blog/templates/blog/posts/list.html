@@ -1,5 +1,10 @@
 {% extends 'blog/base.html' %}
-
+{% load static %}
+{% block script %}
+<script src="{% static 'blog/js/card_post_loop.js' %}"></script>
+<script src="{% static 'blog/js/paginator.js' %}"></script>
+<script src="{% static 'blog/js/posts/list.js' %}"></script>
+{% endblock script %}
 
 {% block title %}
     All the Posts
@@ -9,7 +14,15 @@
 {% block main %}
     <h1>Wellcome to the Home Page</h1>
     <h2>Here you can find all the posts</h2>
+
+    <!-- this two lines are for use javascript pagination -->
+    <input type="hidden" value="{{posts | length}}" id="lenght">
+    <input type="hidden" value="{% url 'published_posts' %}" id="published-endpoint">
     
-    {% include 'blog/posts/snippets/card_for_loop.html' with objects=posts %}
+            
+    <div id="post-list-container">
+        {% include 'blog/posts/snippets/card_post_loop.html' with posts=posts %}
+        {% include 'blog/pagination.html' with page=posts %}
+    </div>
 {% endblock main %}
     
