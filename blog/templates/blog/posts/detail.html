@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+
+
+{% block title %}
+    {{post.title}}
+{% endblock title %}
+    
+
+{% block main %}
+    <h1>{{post.title}}</h1>
+
+    <div class="my-2 d-flex justify-content-between align-items-center">
+        <h3>{{post.author.username}}</h3>
+        <h6 class="lead">{{post.publish}}</h5>
+    </div>
+    {{post.body | linebreaks }}
+    <p class="my-1">Original Created on {{post.created}}</p>
+    <p class="my-1">Last time Updated on {{post.updated}}</p>
+
+{% endblock main %}
+    

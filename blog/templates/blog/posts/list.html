@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+
+
+{% block title %}
+    All the Posts
+{% endblock title %}
+    
+
+{% block main %}
+    <h1>Wellcome to the Home Page</h1>
+    <h2>Here you can find all the posts</h2>
+    
+    {% include 'blog/posts/snippets/card_for_loop.html' with objects=posts %}
+{% endblock main %}
+    
