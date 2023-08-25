@@ -19,6 +19,8 @@
     <a href="{% url 'post_share' post.id %}" class="btn btn-primary">Recomend {{post.title}}</a>
     
     <hr>
+
+    <section id="comments">
     <h3>Comment Section</h3>
     {% include 'blog/posts/snippets/comment_form.html' with post=post %}
 
@@ -37,8 +39,19 @@
     {% empty %}
         <p>No Comments yet</p>
     {% endfor %}
+    </section>
     
     <hr>
+    
+    {% if similar_posts %}
+    <section id="similar_posts">
+        <h3>Similar Posts</h3>
+        {% include 'blog/posts/snippets/card_post_loop.html'  with posts=similar_posts %}
+    </section>
+    
+    <hr>
+    {% endif %}
+    
     <a href="{% url 'post_list' %}"><h3>Come back to Post List</h3></a>
 {% endblock main %}
     

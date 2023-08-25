@@ -5,6 +5,8 @@ from django.utils.text import Truncator
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 
+from taggit.managers import TaggableManager
+
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status=Post.Status.PUBLISHED)
@@ -32,7 +34,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="publish")
 
     objects = models.Manager()
-    publisehd = PublishedManager()
+    published = PublishedManager()
+    tags = TaggableManager()
 
     class Meta:
         ordering = ["-publish"]

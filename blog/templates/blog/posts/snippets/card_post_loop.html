@@ -4,7 +4,20 @@
             <h3>{{post.title}}</h3>
             <h6>By {{post.author.username}}</h6>
             <p class="small">Publish on {{post.publish}}</p>
-            <p class="m-0">{{post.body | truncatewords:20}} </p> 
+            <p class="m-0">{{post.body | truncatewords:20}} </p>
+            
+            {% with tags=post.tags.all  %}
+                {% if tags %}
+                <div class="d-flex flex-wrap gap-1 mt-2">
+                    {% for tag in tags %}
+                        <a class="btn btn-warning btn-sm rounded-pill" href="{% url 'post_list_by_tag' tag.slug %}">
+                            {{tag}}
+                        </a>
+                    {% endfor %}
+                </div>            
+                {% endif %}
+            {% endwith %}
+
     </article>
     </a>
 {% endfor %}

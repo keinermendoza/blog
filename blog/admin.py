@@ -3,6 +3,9 @@ from .models import Post, Comment
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
+
+
+
     list_display = ["title", "author", "created", "publish", "status"]
     list_filter = ["created", "author", "publish", "status"]
     search_fields = ["title", "body"]
@@ -10,6 +13,13 @@ class PostAdmin(admin.ModelAdmin):
     raw_id_fields = ["author"]
     prepopulated_fields = {"slug": ("title",)}
     ordering = ["status", "publish"]
+    # fieldsets = [
+    #     (None,
+    #      {
+    #          "fields": ["title", "body", "author", "status", "slug", "tags"]
+    #      }),
+    # ]
+    
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):

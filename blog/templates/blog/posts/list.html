@@ -13,8 +13,12 @@
 
 {% block main %}
     <h1>Wellcome to the Home Page</h1>
-    <h2>Here you can find all the posts</h2>
-
+    {% if tag %}
+        <h3>Filtering by tag: {{tag}}</h3>
+    {% else %}
+        <h2>Here you can find all the posts</h2>
+    {% endif %}
+    
     <!-- this two lines are for use javascript pagination -->
     <input type="hidden" value="{{posts | length}}" id="lenght">
     <input type="hidden" value="{% url 'published_posts' %}" id="published-endpoint">
