@@ -1,0 +1,19 @@
+from django import template
+from blog.models import Post
+from django.db.models import Count
+
+register = template.Library()
+
+@register.simple_tag
+def total_posts():
+    return Post.published.count()
+
+@register.inclusion_tag("custom_tags/black_alert_posts.html")
+def get_latest_posts(max=4):
+    posts = Post.published.order_by("-publish")[:max]
+    return {"posts":posts}
+
+@register.inclusion_tag("custom_tags/black_alert_posts.html")
+def get_posts_most_commented(max=3):
+    posts = Post.published.annotate(comment_count=Count("comments")).order_by("-comment_count", "-publish")[:max]
+    return {"posts":posts}
