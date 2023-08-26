@@ -2,7 +2,7 @@
 {% load blog_tags %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,21 +19,31 @@
         {% endblock title %}
     </title>
 </head>
-<body class="container-xxl py-3">
-    <div class="float-start w-50 ps-3">
-        {% block main %}
-        {% endblock main %}
-    </div>
-    <div class="float-end w-25 p-3 h-100 card bg-info-subtle">
-        <h2>Keiner's Blog</h2>
-        <h4 >Publicaciones Recientes</h4>
-        {% get_latest_posts %}
-        <hr>
-        <h4>Publicaciones Mas Comentadas</h4>
-        {% get_posts_most_commented %}
-        <hr>
-        <h4 class="m-0"><a class="nav-link" href="{% url 'posts_feed' %}"> Sigueme via RSS</a></h4>
-    </div>
+
+<body class="container-xxl py-3 mx-auto">
+    
+    {% block header %}
+    {% endblock header %}
         
+    <div class="row">
+        <div class="col-12 col-md-8">
+            {% block main %}
+            {% endblock main %}
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="p-3 card bg-info-subtle sticky-md-top top-em float-end">
+                <h2>Keiner's Blog</h2>
+                <h4>Publicaciones Recientes</h4>
+                {% get_latest_posts %}
+                <hr>
+                <h4>Publicaciones Mas Comentadas</h4>
+                {% get_posts_most_commented %}
+                <hr>
+                <h4 class="m-0"><a class="nav-link" href="{% url 'posts_feed' %}">Sigueme via RSS</a></h4>
+            </div>
+        </div>
+
+    </div>        
 </body>
 </html>

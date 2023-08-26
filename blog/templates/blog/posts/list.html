@@ -11,7 +11,26 @@
 {% endblock title %}
     
 
+{% block header %}
+<div class="d-flex flex-wrap-reverse align-items-center justify-content-center justify-content-md-between mb-5">
+    <div class="max-w-400px">
+        <h1>Hola, yo soy Keiner. Bienvenido a mi Blog personal.</h1>
+        <p class="lead sm-small md-normal">Soy Programador Web, soluciono problemas por medio del desarrollo de software. Me apasiona el desarrollo
+            Backend y tambien tengo habilidades basicas de frontend, este Blog trata principalmente sobre eso, pero tambien trata
+            sobre temas personales, espero te sientas a gusto, tus comentarios son bienvenidos.
+        </p>
+    </div>
+
+    <figure class="max-w-400px">
+        <img  id="keiner-photo" src="{% static 'blog/images/keiner.jpg' %}" alt="Fotografia de Perfil de Keiner Mendoza">
+    </figure>
+</div>
+{% endblock header %}
+    
+
+
 {% block main %}
+    
     <h1>Wellcome to the Home Page</h1>
     {% if tag %}
         <h3>Filtering by tag: {{tag}}</h3>

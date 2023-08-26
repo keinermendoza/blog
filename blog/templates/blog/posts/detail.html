@@ -23,12 +23,12 @@
     <hr>
 
     <section id="comments">
-    <h3>Comment Section</h3>
+    <h2 class="my-1">Seccion de Comentarios</h2>
     {% include 'blog/posts/snippets/comment_form.html' with post=post %}
 
     
     {% with total_comments=post.comments.count  %}
-        <h4>{{total_comments}} Comment{{total_comments | pluralize}}</h4>
+        <h4>{{total_comments}} Comentario{{total_comments | pluralize}}</h4>
     {% endwith %}
         
     {% for comment in comments %}
@@ -39,7 +39,7 @@
            <p class="m-0">{{comment.body | from_markdown}}</p>
         </div>
     {% empty %}
-        <p>No Comments yet</p>
+        <p>Nadie ha comentado, que te parece ser el primero? </p>
     {% endfor %}
     </section>
     
