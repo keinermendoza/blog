@@ -25,8 +25,14 @@
         {% endblock main %}
     </div>
     <div class="float-end w-25 p-3 h-100 card bg-info-subtle">
-        <h2>My blog</h2>
-        <p class="m-0">this is my blog</p>
+        <h2>Keiner's Blog</h2>
+        <h4 >Publicaciones Recientes</h4>
+        {% get_latest_posts %}
+        <hr>
+        <h4>Publicaciones Mas Comentadas</h4>
+        {% get_posts_most_commented %}
+        <hr>
+        <h4 class="m-0"><a class="nav-link" href="{% url 'posts_feed' %}"> Sigueme via RSS</a></h4>
     </div>
         
 </body>

@@ -11,7 +11,7 @@ def total_posts():
     return Post.published.count()
 
 @register.inclusion_tag("custom_tags/black_alert_posts.html")
-def get_latest_posts(max=4):
+def get_latest_posts(max=3):
     posts = Post.published.order_by("-publish")[:max]
     return {"posts":posts}
 
@@ -23,3 +23,10 @@ def get_posts_most_commented(max=3):
 @register.filter(name="from_markdown")
 def convert_markdown(text):
     return format_html(markdown.markdown(text))
+
+@register.filter()
+def pluralize_es(n):
+    if n == 1:
+        return "es"
+    else:
+        return ""
