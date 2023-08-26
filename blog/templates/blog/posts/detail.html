@@ -1,5 +1,7 @@
 {% extends 'blog/base.html' %}
 {% load crispy_forms_tags %}
+{% load blog_tags %}
+
 
 {% block title %}
     {{post.title}}
@@ -13,7 +15,7 @@
         <h3>By {{post.author.username}}</h3>
         <h6 class="lead">{{post.publish}}</h5>
     </div>
-    {{post.body | linebreaks }}
+    {{post.body | from_markdown }}
     <p class="my-1">Original Created on {{post.created}}</p>
     <p class="my-1">Last time Updated on {{post.updated}}</p>
     <a href="{% url 'post_share' post.id %}" class="btn btn-primary">Recomend {{post.title}}</a>
@@ -34,7 +36,7 @@
            <p class="small">
                Comment {{forloop.counter}} by {{comment.name}} on {{comment.created}}
            </p> 
-           <p class="m-0">{{comment.body}}</p>
+           <p class="m-0">{{comment.body | from_markdown}}</p>
         </div>
     {% empty %}
         <p>No Comments yet</p>

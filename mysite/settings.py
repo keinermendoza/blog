@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 AUTH_USER_MODEL = "blog.User"
 
 # Application definition
+SITE_ID = 1
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,6 +46,9 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "taggit",
+    "django.contrib.sites",
+    "django.contrib.sitemaps",
+    
 ]
 
 # TAGGIT_CASE_INSENSITIVE = True
