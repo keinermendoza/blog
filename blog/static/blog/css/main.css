@@ -19,6 +19,9 @@ body {
 .max-w-400px {
     width: min(90%, 400px)
 }
+.w-400px-to-600px {
+    width: clamp(400px, 50%, 600px);
+}
 
 #keiner-photo {
     border-radius: 50%;

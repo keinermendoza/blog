@@ -1,7 +1,12 @@
 {% extends 'blog/base.html' %}
 {% load crispy_forms_tags %}
 {% load blog_tags %}
+{% load static %}
 
+{% block script %}
+    <script src="{% static 'blog/js/posts/sender.js' %}"></script>
+{% endblock script %}
+    
 
 {% block title %}
     {{post.title}}
@@ -16,30 +21,36 @@
         <h6 class="lead">{{post.publish}}</h5>
     </div>
     {{post.body | from_markdown }}
-    <p class="my-1">Original Created on {{post.created}}</p>
-    <p class="my-1">Last time Updated on {{post.updated}}</p>
-    <a href="{% url 'post_share' post.id %}" class="btn btn-primary">Recomend {{post.title}}</a>
+
+    <a href="{% url 'post_list' %}" class="btn btn-secondary mt-4">Volver a Todas las Publicaciones</a>
+
     
     <hr>
 
+    <section id="forms">
+        <div class="d-flex flex-wrap justify-content-center justify-content-md-between">
+            {% include 'blog/posts/snippets/comment_form.html' with form=comment_form %}
+            {% include 'blog/posts/snippets/share_form.html' with form=share_form %}
+        </div>
+    </section>
+    
+    <hr>
     <section id="comments">
-    <h2 class="my-1">Seccion de Comentarios</h2>
-    {% include 'blog/posts/snippets/comment_form.html' with post=post %}
-
     
     {% with total_comments=post.comments.count  %}
-        <h4>{{total_comments}} Comentario{{total_comments | pluralize}}</h4>
+        <h4><span id="counter-comments">{{total_comments}}</span> Comentario{{total_comments | pluralize}}</h4>
     {% endwith %}
+
         
     {% for comment in comments %}
-        <div class="my-2">
-           <p class="small">
-               Comment {{forloop.counter}} by {{comment.name}} on {{comment.created}}
+        <div class="my-2 p-2 card bg-secondary-subtle">
+           <p class="small m-0 mb-1">
+               Comentario {{forloop.counter}} realizado por {{comment.name}} en fecha {{comment.created}}
            </p> 
-           <p class="m-0">{{comment.body | from_markdown}}</p>
+           <p class="m-0 lead">{{comment.body}}</p>
         </div>
     {% empty %}
-        <p>Nadie ha comentado, que te parece ser el primero? </p>
+        <p id="to-update">Nadie ha comentado, que te parece ser el primero? </p>
     {% endfor %}
     </section>
     
@@ -54,6 +65,5 @@
     <hr>
     {% endif %}
     
-    <a href="{% url 'post_list' %}"><h3>Come back to Post List</h3></a>
 {% endblock main %}
     

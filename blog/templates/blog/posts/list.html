@@ -12,8 +12,8 @@
     
 
 {% block header %}
-<div class="d-flex flex-wrap-reverse align-items-center justify-content-center justify-content-md-between mb-5">
-    <div class="max-w-400px">
+<div class="d-flex flex-wrap-reverse align-items-center justify-content-center justify-content-lg-between mb-5 column-gap-2">
+    <div class="w-400px-to-600px">
         <h1>Hola, yo soy Keiner. Bienvenido a mi Blog personal.</h1>
         <p class="lead sm-small md-normal">Soy Programador Web, soluciono problemas por medio del desarrollo de software. Me apasiona el desarrollo
             Backend y tambien tengo habilidades basicas de frontend, este Blog trata principalmente sobre eso, pero tambien trata
@@ -31,11 +31,12 @@
 
 {% block main %}
     
-    <h1>Wellcome to the Home Page</h1>
     {% if tag %}
-        <h3>Filtering by tag: {{tag}}</h3>
+        <h2 class="mb-4">Filtrando publicaciones por categoria: {{tag}}</h2>
+        <a href="{% url 'post_list' %}" class="btn btn-secondary mb-4">Volver a Todas las Publicaciones</a>
     {% else %}
-        <h2>Here you can find all the posts</h2>
+        <h2 class="mb-4">Todas las publicaciones</h2>
+
     {% endif %}
     
     <!-- this two lines are for use javascript pagination -->

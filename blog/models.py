@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.query import QuerySet
+from django.db.models import Count
 from django.utils import timezone
 from django.utils.text import Truncator
 from django.contrib.auth.models import AbstractUser
@@ -81,5 +82,13 @@ class Comment(models.Model):
         ]
 
 
-def __str__(self):
-    return f"Comment of {self.name} on {self.post.title}"
+    def __str__(self):
+        return f"Comment of {self.name} on {self.post.title}"
+
+    def serialize(self):
+        return {
+            "name":self.name,
+            "body":self.body,
+            "created": self.created,
+            "count": Comment.objects.filter(id__in=[self.post.id]).count()
+        }

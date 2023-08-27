@@ -6,25 +6,24 @@ from .models import Comment
 class CommentForm(forms.ModelForm):
 
     class Meta:
-        required_message = "Este campo es obligatorio"
-
         model = Comment
         fields = ["name", "email", "body"]
 
         widgets = {
             "body": forms.Textarea(attrs={"rows":4})
         }
+
         error_messages = {
             "name": {
-                "required": required_message,
+                "required": "Por favor llene el campo Nombre",
                 "max_length": "Este campo acepta hasta 120 caracteres"
             },
             "email": {
-                "required": required_message,
+                "required": "Por favor ingrese su Email",
                 "invalid": "Email invalido"
             },
             "body": {
-                "required": required_message,
+                "required": "Estoy feliz de que quiera comentar, por favor rellene el campo Comentario",
             }
         }
         help_texts = {
@@ -39,37 +38,41 @@ class CommentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+     
         self.helper = FormHelper(self)
         self.helper.form_tag = False
 
 
 class EmailPostForm(forms.Form):
-    name = forms.CharField(max_length=120)
-    email = forms.EmailField()
-    to = forms.EmailField()
-    comment = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows":4}))
+    nombre = forms.CharField(max_length=120)
+    correo = forms.EmailField()
+    destinatario = forms.EmailField()
+    comentario = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows":4}))
 
     class Meta:
-        required_message = "Este campo es obligatorio"
         invalid_message = "Email invalido"
 
         error_messages = {
             "name": {
-                "required": required_message,
+                "required": "Por favor llene el campo Nombre",
                 "max_length": "Este campo acepta hasta 120 caracteres"
             },
             "email": {
-                "required": required_message,
+                "required": "El campo Correo es necesario",
                 "invalid": invalid_message,
             },
             "to": {
-                "required": required_message,
+                "required": "El campo Destinatario es necesario",
                 "invalid": invalid_message,
             },
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # for field in self.fields:
+        #     self.fields[field].widget.attrs = {
+        #         'id': f"id_{field}_share"
+        #     }
         self.helper = FormHelper(self)
         self.helper.form_tag = False
 

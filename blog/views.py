@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.decorators.http import require_POST
@@ -63,37 +64,16 @@ def post_detail(request, post_slug, day, month, year):
         .order_by("-common_tags", "-publish")
     
     return render(request, "blog/posts/detail.html", {"post":post,
-                                                      "form":CommentForm(),
+                                                      "comment_form":CommentForm(),
+                                                      "share_form":EmailPostForm(),
                                                       "comments":comments,
                                                       "similar_posts":similar_posts})
                                                       
 
-def post_share(request, post_id):
-    send = False
-    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
 
-    if request.method == "POST":
-        form = EmailPostForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            
-            message = f"You can find it on {request.build_absolute_uri(post.get_absolute_url())}"
-            if cd['comment'].strip() != "":
-                message += f"\n\n{cd['name']}\'s  comments {cd['comment']}"
-        
-            send_mail(
-                f"{cd['name']} recomends you to read {post.title}",
-                message,
-                cd['email'],
-                [cd['to']],
-                fail_silently=False
-            )
-            send = True
-    else:
-        form = EmailPostForm()
-    return render(request, "blog/posts/share.html", {"form":form,
-                                                    "post":post,
-                                                    "send":send,})
+
+
+
 @require_POST
 def post_comment(request, post_id):
     """process the comment submitions"""
@@ -104,7 +84,70 @@ def post_comment(request, post_id):
     if form.is_valid():
         comment = form.save(commit=False)
         comment.post = post
-        post.save()
+        comment.save()
+        return JsonResponse({"message":"Comentario publicado con Exito"}, status=200)
+    else:
+        errors = form.errors.get_json_data()
+        return JsonResponse(errors, status=400, safe=False)
 
-    return render(request, "blog/posts/comment.html", {"post":post, "form":form, "comment":comment})
+    # return render(request, "blog/posts/comment.html", {"post":post, "form":form, "comment":comment})
 
+
+@require_POST
+def post_share(request, post_id):
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+
+    form = EmailPostForm(request.POST)
+    if form.is_valid():
+        cd = form.cleaned_data
+        
+        message = f"acabas de recibir una recomendacion de lectura del\
+            Blog de Keiner Mendoza.\
+            Puedes encontrar la publicacion en {request.build_absolute_uri(post.get_absolute_url())}"
+        
+        message_end = f"\n\nEn caso que no conozca a {cd['nombre']}. o no tenga entre sus contactos a {cd['correo']}\
+            puede ignorar este correo"
+        
+        if cd['comentario'].strip() != "":
+            message += f"\n\n{cd['nombre']}\' tambien dice: {cd['comentario']}"
+    
+        send_mail(
+            f"{cd['nombre']} te recomienda leer {post.title}",
+            message + message_end,
+            cd['correo'],
+            [cd['destinatario']],
+            fail_silently=False
+        )
+        return JsonResponse({"message":"Recomendación enviada con exito."})
+    else:
+        errors = form.errors.get_json_data()
+        return JsonResponse(errors, status=400, safe=False)
+
+   
+
+# def post_share(request, post_id):
+#     send = False
+#     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+
+#     if request.method == "POST":
+#         form = EmailPostForm(request.POST)
+#         if form.is_valid():
+#             cd = form.cleaned_data
+            
+#             message = f"You can find it on {request.build_absolute_uri(post.get_absolute_url())}"
+#             if cd['comment'].strip() != "":
+#                 message += f"\n\n{cd['name']}\'s  comments {cd['comment']}"
+        
+#             send_mail(
+#                 f"{cd['name']} recomends you to read {post.title}",
+#                 message,
+#                 cd['email'],
+#                 [cd['to']],
+#                 fail_silently=False
+#             )
+#             send = True
+#     else:
+#         form = EmailPostForm()
+#     return render(request, "blog/posts/share.html", {"form":form,
+#                                                     "post":post,
+#                                                     "send":send,})
