@@ -1,9 +1,7 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 {% block script %}
-<script src="{% static 'blog/js/card_post_loop.js' %}"></script>
-<script src="{% static 'blog/js/paginator.js' %}"></script>
-<script src="{% static 'blog/js/posts/list.js' %}"></script>
+
 {% endblock script %}
 
 {% block title %}
@@ -38,12 +36,7 @@
         <h2 class="mb-4">Todas las publicaciones</h2>
 
     {% endif %}
-    
-    <!-- this two lines are for use javascript pagination -->
-    <input type="hidden" value="{{posts | length}}" id="lenght">
-    <input type="hidden" value="{% url 'published_posts' %}" id="published-endpoint">
-    
-            
+       
     <div id="post-list-container">
         {% include 'blog/posts/snippets/card_post_loop.html' with posts=posts %}
         {% include 'blog/pagination.html' with page=posts %}
