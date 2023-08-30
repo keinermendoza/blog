@@ -8,6 +8,12 @@ This code is implemented on pythonanywhere.
 
 ### If you want to test it just
 
+clone this brach
+
+```bash
+git clone -b deployed-on-pythonanywhere git@github.com:keinermendoza/blog.git
+```
+
 Create an activate your virtual enviorment
 
 ```bash
