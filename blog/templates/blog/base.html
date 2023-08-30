@@ -7,9 +7,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name=description content="Blog personal de Keiner Mendoza, Desarrollador Web con conocimiento de Python, JavaScript
+    HTML/CSS y el Framework Django.">
+    <meta
+    property="og:image"
+    content="{% static 'blog/images/keiner.jpg' %}" />
+    <meta property="og:title" content="Blog de Keiner Mendoza" />
+    <meta name="twitter:title" content="Blog de Keiner Mendoza" />
+    <meta name="author" content="Keiner Mendoza">
+    <meta name="keywords" content="Desarrollo de Software, Desarrollo Web, Python, Django, JavaScript, Backend, HTML, CSS">
+
     <link rel="stylesheet" href="{% static 'blog/css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
     <script src="{% static 'blog/js/bootstrap.js' %}"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'blog/icons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'blog/icons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'blog/icons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'blog/icons/site.webmanifest' %}">
 
     {% block script %}
     {% endblock script %}
