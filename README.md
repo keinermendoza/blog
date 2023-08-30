@@ -21,9 +21,13 @@ python -m venv venv
 ```
 
 ```bash
-python source venv/bin/activate
+source venv/bin/activate
 ```
 
+Go into the project folder
+```bash
+cd blog
+```
 Install the requirements
 
 ```bash
@@ -46,6 +50,15 @@ Then you can migrate the database
 ```python
 python manage.py migrate
 ```
+
+Now you can run the server
+```python
+python manage.py runserver
+```
+
+ An see the page on [your browser at the port 8000](http://localhost:8000)
+
+
 finally don't forgget to
 change my photo and name, and blog title. you will find them on:
 
