@@ -9,3 +9,4 @@ python-dotenv       ==1.0.0
 setuptools          ==59.6.0
 sqlparse            ==0.4.4
 typing_extensions   ==4.7.1
+ .

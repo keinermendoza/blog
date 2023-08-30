@@ -169,29 +169,3 @@ def logout_view(request):
     logout(request)
     return redirect(reverse("post_list"))
 
-# def post_share(request, post_id):
-#     send = False
-#     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
-
-#     if request.method == "POST":
-#         form = EmailPostForm(request.POST)
-#         if form.is_valid():
-#             cd = form.cleaned_data
-            
-#             message = f"You can find it on {request.build_absolute_uri(post.get_absolute_url())}"
-#             if cd['comment'].strip() != "":
-#                 message += f"\n\n{cd['name']}\'s  comments {cd['comment']}"
-        
-#             send_mail(
-#                 f"{cd['name']} recomends you to read {post.title}",
-#                 message,
-#                 cd['email'],
-#                 [cd['to']],
-#                 fail_silently=False
-#             )
-#             send = True
-#     else:
-#         form = EmailPostForm()
-#     return render(request, "blog/posts/share.html", {"form":form,
-#                                                     "post":post,
-#                                                     "send":send,})
