@@ -1,7 +1,7 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 {% block script %}
-
+    <script src="{% static 'blog/js/posts/search.js' %}"></script>
 {% endblock script %}
 
 {% block title %}
@@ -28,8 +28,17 @@
 
 
 {% block main %}
-    
+    <div class="mb-3 mx-auto w-max-300px">
+        <h2>Buscar Post</h2>
+        <form id="search-form" action="{% url 'search_post' %}">
+            <input name="query" id="query" type="text" class="form-controll">
+        </form>
+    </div>
+    <div id="search-container">
+    </div>    
+
     {% if tag %}
+    
         <h2 class="mb-4">Filtrando publicaciones por categoria: {{tag}}</h2>
         <a href="{% url 'post_list' %}" class="btn btn-secondary mb-4">Volver a Todas las Publicaciones</a>
     {% else %}

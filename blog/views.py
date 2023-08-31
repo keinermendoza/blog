@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from .models import Post, Comment, User
@@ -12,6 +12,7 @@ from django.db.models import Count
 from django.contrib.auth import logout, login, authenticate
 from django.contrib import messages
 from django.contrib.messages import constants
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 def home(request):
     return render(request, "blog/home.html")
@@ -128,6 +129,20 @@ def post_share(request, post_id):
         errors = form.errors.get_json_data()
         return JsonResponse(errors, status=400, safe=False)
 
+@require_GET
+def search_post(request):
+    query = request.GET.get("query")    
+    if query:
+        vector = SearchVector("title", "body", config='spanish')
+        query = SearchQuery(query, config='spanish')
+
+        posts = Post.objects.annotate(search=vector, rank=SearchRank(vector, query))\
+        .filter(search=query).order_by("-rank")
+
+        return JsonResponse([post.serialize() for post in posts], safe=False, status=200)
+    else:
+        return JsonResponse({"error":"query field required"}, status=400)
+
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -168,30 +183,3 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect(reverse("post_list"))
-
-# def post_share(request, post_id):
-#     send = False
-#     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
-
-#     if request.method == "POST":
-#         form = EmailPostForm(request.POST)
-#         if form.is_valid():
-#             cd = form.cleaned_data
-            
-#             message = f"You can find it on {request.build_absolute_uri(post.get_absolute_url())}"
-#             if cd['comment'].strip() != "":
-#                 message += f"\n\n{cd['name']}\'s  comments {cd['comment']}"
-        
-#             send_mail(
-#                 f"{cd['name']} recomends you to read {post.title}",
-#                 message,
-#                 cd['email'],
-#                 [cd['to']],
-#                 fail_silently=False
-#             )
-#             send = True
-#     else:
-#         form = EmailPostForm()
-#     return render(request, "blog/posts/share.html", {"form":form,
-#                                                     "post":post,
-#                                                     "send":send,})
