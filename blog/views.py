@@ -1,3 +1,4 @@
+import markdown
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
@@ -12,7 +13,7 @@ from django.db.models import Count
 from django.contrib.auth import logout, login, authenticate
 from django.contrib import messages
 from django.contrib.messages import constants
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, SearchHeadline
 
 def home(request):
     return render(request, "blog/home.html")
@@ -135,11 +136,21 @@ def search_post(request):
     if query:
         vector = SearchVector("title", "body", config='spanish')
         query = SearchQuery(query, config='spanish')
+        headline = SearchHeadline("body",
+                                  query,
+                                  start_sel="<span class='bg-warning text-dark'>",
+                                  stop_sel="</span>",
+                                  max_words=50,
+                                  min_words=30)
 
-        posts = Post.objects.annotate(search=vector, rank=SearchRank(vector, query))\
-        .filter(search=query).order_by("-rank")
+        posts = Post.published.annotate(search=vector, rank=SearchRank(vector, query))\
+        .annotate(headline=headline).filter(search=query).order_by("-rank")
 
-        return JsonResponse([post.serialize() for post in posts], safe=False, status=200)
+        return JsonResponse([{"title":post.title,
+                              "body":markdown.markdown(post.headline),
+                              "author":post.author.username,
+                              "publish":post.publish,
+                              "url":post.get_absolute_url()} for post in posts], safe=False, status=200)
     else:
         return JsonResponse({"error":"query field required"}, status=400)
 

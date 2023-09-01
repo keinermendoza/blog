@@ -22,13 +22,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function builder(container, data) {
-    if (data.length == 0){ return;}
+    if (data.length == 0){ 
+        container.innerHTML = "";
+        return;
+    }
     container.innerHTML = data.map(elem => {
         return  `
-        <h3>${elem.title}</h3>
-        <p>${elem.body}</p>
-		`
+        <a class="nav-link" href="${elem.url}">
+        <article class="card p-2 my-1">
+            <h3>${elem.title}</h3>
+            <h6>By ${elem.author}</h6>
+            <p class="small">Publish on ${new Date(elem.publish)}</p>
+            <p class="m-0">${elem.body}</p>
+        </article>
+        </a>
+
+        `
 	}).join("");
-    console.log(data);
 
 }

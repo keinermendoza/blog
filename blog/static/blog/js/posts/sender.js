@@ -26,7 +26,6 @@ class Sender{
                 }
             })
             .then(data => {
-                console.log(data);
                 this.handleSuccess(data);
             })
             .catch(err => {
