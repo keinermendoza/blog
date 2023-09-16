@@ -29,19 +29,19 @@ gunicorn -c conf/gunicorn_config.py blog.mysite.wsgi -D
 sudo service ngnix start
 
 # remove default nginx conf sites-avaliable
-sudo rm --f /etc/nginx/sites-available/default
+# sudo rm --f /etc/nginx/sites-available/default
 
 # copy my custom conf sites-available
 sudo cp home/ubuntu/blog/sites-available/blog /etc/nginx/sites-available
 
 # entry to nginx folder
-cd /etc/nginx/sites-enabled
+cd /etc/nginx/sites-enabled/
 
 # linkig to my project
 sudo ln -s /etc/nginx/sites-available/blog
 
 # restarting ngnix
-sudo systemctl restart ngnix
+sudo systemctl restart nginx
 
 # migrate database sqlite for test
 python3 manage.py migrate
