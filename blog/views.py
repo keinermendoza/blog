@@ -103,32 +103,32 @@ def post_comment(request, post_id):
         errors = form.errors.get_json_data()
         return JsonResponse(errors, status=400, safe=False)
 
-@login_required
-@require_POST
-def post_share(request, post_id):
-    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+# @login_required
+# @require_POST
+# def post_share(request, post_id):
+#     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
 
-    form = EmailPostForm(request.POST)
-    if form.is_valid():
-        cd = form.cleaned_data
+#     form = EmailPostForm(request.POST)
+#     if form.is_valid():
+#         cd = form.cleaned_data
         
-        message = f"acabas de recibir una recomendacion de lectura del Blog de Keiner Mendoza. Puedes encontrar la publicacion en {request.build_absolute_uri(post.get_absolute_url())}"
-        message_end = f"\n\nEn caso que no conozca a {request.user} o no tenga entre sus contactos a {request.user.email} puede ignorar este correo"
+#         message = f"acabas de recibir una recomendacion de lectura del Blog de Keiner Mendoza. Puedes encontrar la publicacion en {request.build_absolute_uri(post.get_absolute_url())}"
+#         message_end = f"\n\nEn caso que no conozca a {request.user} o no tenga entre sus contactos a {request.user.email} puede ignorar este correo"
         
-        if cd['comentario'].strip() != "":
-            message += f"\n\n{request.user}\' comenta sobre esta publicacion que: {cd['comentario']}"
+#         if cd['comentario'].strip() != "":
+#             message += f"\n\n{request.user}\' comenta sobre esta publicacion que: {cd['comentario']}"
     
-        send_mail(
-            f"{request.user} te recomienda leer {post.title}",
-            message + message_end,
-            request.user.email,
-            [cd['destinatario']],
-            fail_silently=False
-        )
-        return JsonResponse({"message":"Recomendación enviada con exito."})
-    else:
-        errors = form.errors.get_json_data()
-        return JsonResponse(errors, status=400, safe=False)
+#         send_mail(
+#             f"{request.user} te recomienda leer {post.title}",
+#             message + message_end,
+#             request.user.email,
+#             [cd['destinatario']],
+#             fail_silently=False
+#         )
+#         return JsonResponse({"message":"Recomendación enviada con exito."})
+#     else:
+#         errors = form.errors.get_json_data()
+#         return JsonResponse(errors, status=400, safe=False)
 
 @require_GET
 def search_post(request):
