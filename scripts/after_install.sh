@@ -29,7 +29,7 @@ gunicorn -c conf/gunicorn_config.py blog.mysite.wsgi -D
 sudo service ngnix start
 
 # copy my custom config of ngnix on it's default folder
-cp --f home/ubuntu/blog/sites-available home/ubuntu/etc/nginx/sites-available
+sudo cp --f home/ubuntu/blog/sites-available /etc/nginx/sites-available
 
 # entry to nginx folder
 cd /etc/nginx/sites-enabled
