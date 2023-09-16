@@ -13,7 +13,7 @@ cd /home/ubuntu/blog/
 python3 -m venv venv
 source venv/bin/activate
 
-install requirements.txt
+# install requirements.txt
 pip install -r /home/ubuntu/blog/requirements.txt
 
 # migrate database sqlite for test

@@ -12,9 +12,9 @@ wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
 sudo chmod +x ./install 
 sudo ./install auto
 
-# update os & install python3
+# update os & install python3 and libpq-dev for postgresql
 sudo apt-get update
-sudo apt-get install -y python3 python3-dev python3-pip python3-venv
+sudo apt-get install -y python3 python3-dev python3-pip python3-venv libpq-dev
 pip install --user --upgrade virtualenv
 
 # delete app
