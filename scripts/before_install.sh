@@ -19,3 +19,9 @@ pip install --user --upgrade virtualenv
 
 # delete app
 sudo rm -rf /home/ubuntu/blog
+
+# ubicandome en la base
+cd
+
+# instalando nginx
+sudo apt install nginx -y

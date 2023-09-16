@@ -1,0 +1,12 @@
+server {
+    listen 80;
+    server_name 3.81.102.13;
+
+location /static/ {
+    root /home/ubuntu/blog/static;
+}
+
+location / {
+    proxy_pass http://3.81.102.13:8000;
+}
+}
