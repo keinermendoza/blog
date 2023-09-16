@@ -28,7 +28,7 @@ SECRET_KEY = "foo"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["54.209.224.235"]
+ALLOWED_HOSTS = ["ec2-3-81-102-13.compute-1.amazonaws.com"]
 
 AUTH_USER_MODEL = "blog.User"
 
