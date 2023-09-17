@@ -22,6 +22,8 @@ python3 manage.py collectstatic
 # ubicandome en la base
 cd
 
+# instalando nginx
+sudo apt install nginx -y
 
 # iniciando gunicorn modo daemon
 gunicorn -c conf/gunicorn_config.py blog.mysite.wsgi -D

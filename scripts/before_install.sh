@@ -6,6 +6,10 @@
 # clean codedeploy-agent files for a fresh install
 sudo rm -rf /home/ubuntu/install
 
+# stop and uninstall nginx
+sudo nginx -s stop
+sudo apt-get remove --purge nginx* -y
+
 # install CodeDeploy agent
 sudo apt-get -y update
 sudo apt-get -y install ruby
@@ -23,8 +27,4 @@ pip install --user --upgrade virtualenv
 # delete app
 sudo rm -rf /home/ubuntu/blog
 
-# ubicandome en la base
-cd
 
-# instalando nginx
-sudo apt install nginx -y
