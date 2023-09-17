@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# sudo systemctl stop nginx
+# sudo apt-get remove nginx
+
 # clean codedeploy-agent files for a fresh install
 sudo rm -rf /home/ubuntu/install
 
