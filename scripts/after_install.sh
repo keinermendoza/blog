@@ -7,7 +7,7 @@
 # # sudo pkill -f tailwind
 # # sudo pkill -f node
 
-# cd /home/ubuntu/blog/
+# # este no cd /home/ubuntu/blog/
 
 # # activate virtual environment
 # python3 -m venv venv
@@ -16,17 +16,20 @@
 # # install requirements.txt
 # pip install -r /home/ubuntu/blog/requirements.txt
 
+# copy my custom gunicorn conf folder to the root
+# sudo cp -r blog/conf /home/ubuntu
+
 # # puting staticfiles on a single static folder
-# python3 manage.py collectstatic
+# # # revision python3 manage.py collectstatic
 
 # # ubicandome en la base
-# cd
+# # #cd
 
 # # instalando nginx
 # sudo apt install nginx -y
 
 # # iniciando gunicorn modo daemon
-# gunicorn -c conf/gunicorn_config.py blog.mysite.wsgi -D
+# gunicorn -c conf/gunicorn_config.py mysite.wsgi -D
 
 # # iniciando nginx
 # sudo service ngnix start

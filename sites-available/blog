@@ -3,7 +3,7 @@ server {
     server_name 3.81.102.13;
 
 location /static/ {
-    root /home/ubuntu/blog/static;
+    root /home/ubuntu/static;
 }
 
 location / {
