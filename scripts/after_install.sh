@@ -5,7 +5,7 @@ sudo pwd > aqui.txt
 sudo mv aqui.txt /home/
 
 # go into the blog floder
-cd ./blog
+cd home/ubuntu/blog
 
 # Create images using the docker-compose
 sudo docker compose build
