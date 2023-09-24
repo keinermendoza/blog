@@ -9,7 +9,7 @@
 
 }
 body {
-    background-color: var(--dark--color);
+    background-color: red;
     color: var(--light--color);
 }
 .z-maximum {
